@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://future-x-shield.luckynoob410.workers.dev/"><b>Live demo</b></a> ·
+  <a href="https://future-x-shield.pages.dev/"><b>Live demo</b></a> ·
   <a href="#run-it-locally">Run locally</a> ·
   <a href="#how-it-works">How it works</a> ·
   <a href="#the-evidence">Evidence</a>
