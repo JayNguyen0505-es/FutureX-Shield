@@ -191,4 +191,6 @@ Font: [Be Vietnam Pro](https://github.com/bettergui/BeVietnamPro), licensed unde
 
 ## License
 
-All rights reserved. This repository is published for portfolio and reference purposes; no license is granted for reuse. Future X and DNSE are trademarks of DNSE Securities JSC, used here only to describe the competition case.
+Copyright © 2026 [Nguyen Truong Thinh](https://github.com/JayNguyen0505-es) and [Nguyen Hai Phong](https://github.com/Xx-Pumpkin-xX). All rights reserved.
+
+This repository is published for portfolio and reference purposes; no license is granted to copy, modify or redistribute it without the authors' permission. Future X and DNSE are trademarks of DNSE Securities JSC, used here only to describe the competition case.
