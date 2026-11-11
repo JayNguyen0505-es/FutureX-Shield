@@ -22,7 +22,7 @@
 
 ![Future X Shield overview](assets/hero.jpg)
 
-> **Disclaimer.** Future X Shield is a competition concept. It is **not** a DNSE product or an official DNSE interface, and nothing on the page is investment advice. Figures marked **[M]** are simulated, **[A]** are assumptions awaiting DNSE confirmation, and **[F]** are sourced from Future X rules or Vietnamese law.
+> **Disclaimer.** Future X Shield is a competition concept. It is **not** a DNSE product or an official DNSE interface. Figures marked **[M]** are simulated, **[A]** are assumptions awaiting DNSE confirmation, and **[F]** are sourced from Future X rules or Vietnamese law.
 
 ---
 
@@ -122,75 +122,8 @@ wrangler.jsonc       Cloudflare Workers config: serves dist/ as static assets.
 RUNBOOK.md           Deploy, update and rollback steps (Vietnamese).
 ```
 
-## Run it locally
-
-Requires **Node.js 18+** (Node 20 recommended, see `.nvmrc`).
-
-```bash
-npm ci                            # installs Playwright (needed only for e2e)
-npm test                          # unit, simulation and build tests: 51 / 17 / 18 / 59 pass
-node build.js                     # writes dist/index.html and dist/_headers
-npx playwright install chromium   # first time only
-npm run e2e                       # builds, then runs the browser tests
-```
-
-Then open `dist/index.html` in any browser. No server needed.
-
-If Playwright's Chromium cannot be downloaded, use an installed browser instead: `E2E_CHANNEL=msedge` or `E2E_CHANNEL=chrome`.
-
-No environment variables are required. `.env.example` documents every variable the code reads (build metadata injected by CI, and optional e2e settings), and `tests/test_build.js` checks that list stays in sync with the code.
-
-## Build safeguards
-
-`build.js` stamps the commit, branch and build time into `window.__BUILD__` and a `<meta name="build">` tag, shown in the page footer. Uncommitted changes are marked `+dirty`, and `--require-clean` makes the build fail on them.
-
-The build **refuses to write output** if:
-
-- the output contains anything that looks like a secret (tokens, API keys, private keys);
-- `engine/engine.js` differs from the prototype copy at `../prototype_engine/engine.js` (checked only when that folder exists);
-- `src/index.html` contains inline `onclick=` handlers or a second `<script>` tag, which the CSP would block.
-
-## Deployment
-
-The live site is served by **Cloudflare Workers Builds**, which pulls from GitHub and runs:
-
-```bash
-npm test && node build.js --require-clean   # build command
-npx wrangler deploy                         # deploy command (serves dist/ only)
-```
-
-If tests fail or the build is not from a clean commit, Cloudflare keeps the previous version live. `dist/_headers` adds security headers a `<meta>` tag cannot set (`frame-ancestors`, `X-Content-Type-Options: nosniff`). GitHub Actions runs the unit and e2e tests on every push to `main`; its optional GitHub Pages deploy stays off unless the repo variable `DEPLOY_PAGES` is set to `true`.
-
-Step-by-step deploy, rollback and takedown instructions are in [`RUNBOOK.md`](RUNBOOK.md).
-
-## Privacy and security
-
-- No sign-in, cookies, analytics or network requests. Every calculation runs in the browser.
-- No form posts anywhere and there is no server, so there is no server-side attack surface.
-- `localStorage` stores only the chosen language, wrapped in `try/catch` so the page still works when storage is blocked.
-
-## Known limitations
-
-- **Thresholds** (18.48% / 17.71% / 17.35%) come from a DNSE FAQ example and need DNSE confirmation.
-- **Intraday price order** is assumed, and VN30F2M is assumed to trade at the VN30F1M price in the portfolio demo.
-- **The Real portfolio demo differs from Simulation 1 in three ways:** it checks at the opening price (so gap opens force-close at the open), walks intraday prices in 0.01% steps (force-closing exactly at 17.35% rather than at the session's high or low), and keeps Deals open until closed rather than auto-closing after 5 sessions. The page states this under the demo.
-- **No margin call step** yet when unallocated margin goes negative (e.g. Trader B after 3 Apr 2025).
-- The **"5-session peak scale"** state (FR-23) is not implemented, as the demo account has no data for it.
-- **Matrix cell boundary:** A and C count as "high" above an equal share (1/n) of the total. This is a design choice.
-- Tested on Chromium and Edge; **not yet verified on Safari for iOS**.
-- The product name "Future X Shield" is a working title.
-
-## Credits
-
-Built by team **ROAD TO 30** for Future Business Analyst Season 6 (2026), on the DNSE Securities case.
-
-- Calculation rules and `shield_engine.py`: the team's Product group
-- Simulations 1–3 and the VN30F1M dataset: the team's Simulation group
-
-Font: [Be Vietnam Pro](https://github.com/bettergui/BeVietnamPro), licensed under the SIL Open Font License (see `fonts/OFL.txt`).
-
 ## License
 
-Copyright © 2026 [Nguyen Truong Thinh](https://github.com/JayNguyen0505-es) and [Nguyen Hai Phong](https://github.com/Xx-Pumpkin-xX). All rights reserved.
+Copyright © 2026 [Nguyen Truong Thinh](https://github.com/JayNguyen0505-es), [Nguyen Hai Phong](https://github.com/Xx-Pumpkin-xX) and **ROAD TO 30** team. All rights reserved.
 
 This repository is published for portfolio and reference purposes; no license is granted to copy, modify or redistribute it without the authors' permission. Future X and DNSE are trademarks of DNSE Securities JSC, used here only to describe the competition case.
